@@ -39,8 +39,8 @@ and add the repository's url to the app's build.gradle file.
 
 ```
 dependencies {
-   compile 'com.github.adityaarora1:LiveEdgeDetection:1.0.6'
-   
+    // FIXME: Ensure this is a stable version for release.
+    implementation 'com.github.konciergeMD:LiveEdgeDetection:bug_broken_jitpack-SNAPSHOT'}   
     // Other dependencies your app might use
 }
 ```
