@@ -1,7 +1,5 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-
-group = 'com.github.adityaarora1'
+ 
 android {
     compileSdkVersion 26
 
@@ -39,3 +37,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation project(':openCVLibrary310')
 }
+
+apply plugin: 'com.github.dcendents.android-maven'
+group='com.github.hayden-accolade'
