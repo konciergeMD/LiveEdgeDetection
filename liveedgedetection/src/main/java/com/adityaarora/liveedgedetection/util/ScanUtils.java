@@ -334,7 +334,8 @@ public class ScanUtils {
     private static Mat morph_kernel = new Mat(new Size(ScanConstants.KSIZE_CLOSE, ScanConstants.KSIZE_CLOSE), CvType.CV_8UC1, new Scalar(255));
 
     public static Quadrilateral detectLargestQuadrilateral(Mat originalMat) {
-        Imgproc.cvtColor(originalMat, originalMat, Imgproc.COLOR_BGR2GRAY, 4);
+//        Imgproc.cvtColor(originalMat, originalMat, Imgproc.COLOR_BGR2GRAY, 4);
+        Imgproc.cvtColor(originalMat, originalMat, Imgproc.COLOR_RGB2GRAY, 4);
 
         // Just OTSU/Binary thresholding is not enough.
         //Imgproc.threshold(mGrayMat, mGrayMat, 150, 255, THRESH_BINARY + THRESH_OTSU);
@@ -356,7 +357,13 @@ public class ScanUtils {
         Core.normalize(originalMat, originalMat, 0, 255, Core.NORM_MINMAX);
         // step 3.
         // After above preprocessing, canny edge detection can now work much better.
-        Imgproc.Canny(originalMat, originalMat, ScanConstants.CANNY_THRESH_U, ScanConstants.CANNY_THRESH_L);
+        try {
+            Imgproc.Canny(originalMat, originalMat, ScanConstants.CANNY_THRESH_U, ScanConstants.CANNY_THRESH_L);
+        } catch (Exception e) {
+//            Timber.d("Canny is not fully supported on this device");
+            Log.e(TAG, "Canny is not fully supported on this device");
+
+        }
         // step 4.
         // Cutoff the remaining weak edges
         Imgproc.threshold(originalMat,originalMat,ScanConstants.CUTOFF_THRESH,255,Imgproc.THRESH_TOZERO);
