@@ -122,7 +122,7 @@ public class ImageDetectionProperties {
     }
 
     private boolean isRightEdgeTouching() {
-        return (topRightPoint.y >= previewWidth - 10 || bottomRightPoint.y >= previewWidth - 10);
+        return (topRightPoint.y >= previewWidth - 5 || bottomRightPoint.y >= previewWidth - 5);
     }
 
     private boolean isLeftEdgeTouching() {
