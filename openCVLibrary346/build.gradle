@@ -15,3 +15,6 @@ android {
         }
     }
 }
+
+apply plugin: 'com.github.dcendents.android-maven'
+group='com.github.hayden-accolade'
