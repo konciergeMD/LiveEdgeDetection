@@ -1,16 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">@color/accoladeWhite</color>
+    <color name="colorPrimaryDark">@color/accoladeDarkBlue</color>
+    <color name="colorAccent">@color/accoladeBlue</color>
+    <color name="colorSecondary">@color/accoladeSteel</color>
+
     <color name="colorBlackFortyPercentAlpha">#66000000</color>
+
     <color name="white">#FFFFFF</color>
     <color name="red">#ff2600</color>
-    <color name="green">#26d84c</color>
 
     <color name= "orange">#ff9c00</color>
-    <color name="edge_color">#00d1fe</color>
-    <color name="crop_color">#00d1fe</color>
+    <color name="edge_color">@color/accoladeLightBlue</color>
+    <color name="crop_color">@color/white</color>
 
     <color name="colorBlackThirtyFivePercentAlpha">#59000000</color>
+
+    <!-- Official Accolade color palette - DO NOT MODIFY!!! -->
+    <color name="accoladeBlue">#003DA6</color>
+    <color name="accoladeDarkBlue">#131E46</color>
+    <color name="accoladeLightBlue">#5BC2E7</color>
+    <color name="accoladeLinkBlue">#009bd6</color>
+    <color name="accoladePeriwinkle">#D2E0F9</color>
+    <color name="accoladeGreen">#00B388</color>
+    <color name="accoladeForestGreen">#008364</color>
+    <color name="accoladePaleClover">#DFF0D8</color>
+    <color name="accoladePaleAqua">#C3E6E4</color>
+    <color name="accoladeGold">#FFBB1C</color>
+    <color name="accoladeLightGold">#FAF6E2</color>
+    <color name="accoladeSkyBlue">#2E71CD</color>
+    <color name="accoladeGrey">#B4B6B3</color>
+    <color name="accoladeBrightGray">#F6F6F6</color>
+    <color name="accoladeDoubleSatanGray">#666666</color>
+    <color name="accoladeLightGrey">#d8d8d8</color>
+    <color name="accoladeNeonRed">#D0021B</color>
+    <color name="accoladeWhite">#FFFFFF</color>
+    <color name="accoladeMint">#D2ECEB</color>
+    <color name="accoladeSteel">#80474e56</color>
+    <color name="accolade95Black">#98000000</color>
+    <color name="accolade33Black">#333333</color>
+    <color name="accoladeSangria">#AA0111</color>
+    <color name="accoladeFlesh">#f3b2b5</color>
+    <color name="accoladeVeryLightGray">#fafafa</color>
+    <color name="accoladeAccumulatorBlue">#53CAC4</color>
+    <color name="accoladeAccumulatorGreen">#48D597</color>
+    <color name="accoladeEggplant">#652468</color>
+    <color name="accoladeAlphaEggplant">#8C652468</color>
+    <color name="accoladeBoldEggplant">#7B1480</color>
+    <color name="accoladeOrange">#e0722b</color>
+    <color name="accoladeFluffyDarkBlue">#89b0f3</color>
+    <color name="accoladeFluffyTeal">#7cc7b5</color>
+    <color name="accoladeFluffyLightBlue">#7fd0ed</color>
+    <color name="accoladeFluffyLavender">#ca94cc</color>
 </resources>

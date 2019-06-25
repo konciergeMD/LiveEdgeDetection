@@ -183,7 +183,7 @@ public class ScanActivity extends AppCompatActivity implements IScanner, View.On
                 break;
             case FIND_RECT:
                 captureHintText.setText(getResources().getString(R.string.finding_rect));
-                captureHintLayout.setBackground(getResources().getDrawable(R.drawable.hint_white));
+                captureHintLayout.setBackground(getResources().getDrawable(R.drawable.hint_blue));
                 break;
             case CAPTURING_IMAGE:
                 captureHintText.setText(getResources().getString(R.string.hold_still));

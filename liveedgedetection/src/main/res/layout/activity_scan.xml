@@ -72,8 +72,9 @@
         android:id="@+id/capture_hint_layout"
         android:layout_width="wrap_content"
         android:layout_height="46dp"
-        android:layout_gravity="center"
-        android:background="@drawable/hint_white"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/hint_blue"
         android:orientation="vertical"
         android:visibility="gone">
 
@@ -82,7 +83,7 @@
             style="@style/TextShadow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="center"
             android:gravity="center"
             android:paddingBottom="4dp"
             android:paddingLeft="12dp"
