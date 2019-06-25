@@ -362,7 +362,6 @@ public class ScanUtils {
         } catch (Exception e) {
 //            Timber.d("Canny is not fully supported on this device");
             Log.e(TAG, "Canny is not fully supported on this device");
-
         }
         // step 4.
         // Cutoff the remaining weak edges
