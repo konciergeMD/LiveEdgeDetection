@@ -43,53 +43,49 @@
             android:layout_marginBottom="20dp"
             android:gravity="center">
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
             <ImageView
                 android:id="@+id/crop_accept_btn"
                 android:layout_width="@dimen/btn_scan_options_size"
                 android:layout_height="@dimen/btn_scan_options_size"
+                android:layout_margin="12dp"
                 android:background="@drawable/accept"
                 android:contentDescription="@string/btn_description_accept_this_crop"
                 android:padding="@dimen/btn_icon_padding"
                 android:src="@drawable/ic_check_white_24dp" />
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.6" />
+            <ImageView
+                android:id="@+id/crop_save_btn"
+                android:layout_width="@dimen/btn_scan_options_size"
+                android:layout_height="@dimen/btn_scan_options_size"
+                android:layout_margin="12dp"
+                android:background="@drawable/accept"
+                android:contentDescription="@string/btn_description_accept_this_crop"
+                android:padding="@dimen/btn_icon_padding"
+                android:onClick="saveImage"
+                android:visibility="gone"
+                android:src="@drawable/ic_save_white_24dp" />
 
             <ImageView
                 android:id="@+id/crop_rotate_btn"
                 android:layout_width="@dimen/btn_scan_options_size"
                 android:layout_height="@dimen/btn_scan_options_size"
+                android:layout_margin="12dp"
                 android:background="@drawable/rotate"
                 android:contentDescription="@string/btn_description_rotate_the_crop"
-                android:onClick="onRotateButtonClick"
                 android:padding="@dimen/btn_icon_padding"
-                android:src="@drawable/ic_rotate_90_degrees_ccw_white_18dp" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.6" />
+                android:src="@drawable/ic_rotate_90_degrees_ccw_white_18dp"
+                android:onClick="onRotateButtonClick"/>
 
             <ImageView
                 android:id="@+id/crop_reject_btn"
                 android:layout_width="@dimen/btn_scan_options_size"
                 android:layout_height="@dimen/btn_scan_options_size"
+                android:layout_margin="12dp"
                 android:background="@drawable/reject"
                 android:contentDescription="@string/btn_description_reject_this_crop"
                 android:padding="@dimen/btn_icon_padding"
                 android:src="@drawable/ic_clear_white_24dp" />
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
         </LinearLayout>
     </FrameLayout>
 

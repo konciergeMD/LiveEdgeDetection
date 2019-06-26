@@ -9,10 +9,10 @@
     <uses-feature android:name="android.hardware.camera" />
 
     <application android:supportsRtl="true">
+        <activity android:name=".activity.RotateActivity"></activity>
         <activity
-            android:name="com.adityaarora.liveedgedetection.activity.ScanActivity"
+            android:name=".activity.ScanActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
     </application>
 
 </manifest>
