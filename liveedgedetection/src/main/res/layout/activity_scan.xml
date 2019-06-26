@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container_scan"
     android:layout_width="match_parent"
@@ -9,24 +10,29 @@
     <FrameLayout
         android:id="@+id/camera_preview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent" >
+
+    </FrameLayout>
 
     <FrameLayout
         android:id="@+id/crop_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
+        android:background="@color/accolade95Black"
         android:visibility="gone">
 
         <ImageView
             android:id="@+id/crop_image_view"
-            android:layout_width="wrap_content"
+            android:adjustViewBounds="true"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:visibility="invisible"/>
 
         <com.adityaarora.liveedgedetection.view.PolygonView
             android:id="@+id/polygon_view"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
 
@@ -44,10 +50,27 @@
 
             <ImageView
                 android:id="@+id/crop_accept_btn"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:alpha="0.8"
-                android:src="@drawable/accept" />
+                android:layout_width="@dimen/btn_scan_options_size"
+                android:layout_height="@dimen/btn_scan_options_size"
+                android:background="@drawable/accept"
+                android:contentDescription="@string/btn_description_accept_this_crop"
+                android:padding="@dimen/btn_icon_padding"
+                android:src="@drawable/ic_check_white_24dp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6" />
+
+            <ImageView
+                android:id="@+id/crop_rotate_btn"
+                android:layout_width="@dimen/btn_scan_options_size"
+                android:layout_height="@dimen/btn_scan_options_size"
+                android:background="@drawable/rotate"
+                android:contentDescription="@string/btn_description_rotate_the_crop"
+                android:onClick="onRotateButtonClick"
+                android:padding="@dimen/btn_icon_padding"
+                android:src="@drawable/ic_rotate_90_degrees_ccw_white_18dp" />
 
             <View
                 android:layout_width="0dp"
@@ -56,10 +79,12 @@
 
             <ImageView
                 android:id="@+id/crop_reject_btn"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:alpha="0.8"
-                android:src="@drawable/reject" />
+                android:layout_width="@dimen/btn_scan_options_size"
+                android:layout_height="@dimen/btn_scan_options_size"
+                android:background="@drawable/reject"
+                android:contentDescription="@string/btn_description_reject_this_crop"
+                android:padding="@dimen/btn_icon_padding"
+                android:src="@drawable/ic_clear_white_24dp" />
 
             <View
                 android:layout_width="0dp"
@@ -85,9 +110,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
+            android:paddingLeft="@dimen/btn_icon_padding"
+            android:paddingRight="@dimen/btn_icon_padding"
             android:paddingBottom="4dp"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
             android:text="@string/finding_rect"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_18" />

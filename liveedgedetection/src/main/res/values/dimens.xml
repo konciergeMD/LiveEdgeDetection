@@ -2,4 +2,7 @@
 <resources>
     <dimen name="text_size_18">18sp</dimen>
     <dimen name="scan_padding">18dp</dimen>
+
+    <dimen name="btn_icon_padding">12dp</dimen>
+    <dimen name="btn_scan_options_size">50dp</dimen>
 </resources>
