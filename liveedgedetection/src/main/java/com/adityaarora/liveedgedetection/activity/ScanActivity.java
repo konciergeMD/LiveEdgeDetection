@@ -2,7 +2,6 @@ package com.adityaarora.liveedgedetection.activity;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -24,7 +23,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -39,7 +37,6 @@ import com.adityaarora.liveedgedetection.interfaces.IScanner;
 import com.adityaarora.liveedgedetection.util.ScanUtils;
 import com.adityaarora.liveedgedetection.view.PolygonPoints;
 import com.adityaarora.liveedgedetection.view.PolygonView;
-import com.adityaarora.liveedgedetection.view.ProgressDialogFragment;
 import com.adityaarora.liveedgedetection.view.Quadrilateral;
 import com.adityaarora.liveedgedetection.view.ScanSurfaceView;
 
@@ -60,37 +57,38 @@ import static android.view.View.GONE;
  * This class initiates camera and detects edges on live view
  */
 public class ScanActivity extends AppCompatActivity implements IScanner, View.OnClickListener {
+    public final static Stack<PolygonPoints> allDraggedPointsStack = new Stack<>();
     private static final String TAG = ScanActivity.class.getSimpleName();
-
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 101;
+    private static final String mOpenCvLibrary = "opencv_java3";
+
+    // Load OpenCV -- DO NOT REMOVE THIS OR ELSE YOU WILL HAVE A BAD TIME
+    static {
+        System.loadLibrary(mOpenCvLibrary);
+    }
 
     private ViewGroup containerScan;
     private FrameLayout cameraPreviewLayout;
+    private FrameLayout cropLayout;
     private ScanSurfaceView mImageSurfaceView;
     private boolean isPermissionNotGranted;
-    private static final String mOpenCvLibrary = "opencv_java3";
-    private static ProgressDialogFragment progressDialogFragment;
     private TextView captureHintText;
     private LinearLayout captureHintLayout;
-
-    public final static Stack<PolygonPoints> allDraggedPointsStack = new Stack<>();
     private PolygonView polygonView;
     private ImageView cropImageView;
-
+    // Buttons switch up being active
     private View cropAcceptBtn;
     private View cropRejectBtn;
     private View cropSaveBtn;
     private View cropRotateBtn;
+    // Bitmap that has been registered as a card/document
     private Bitmap copyBitmap;
-    private FrameLayout cropLayout;
-
-    // Maintains current rotation
+    // Bitmap that has been cropped and enhanced
+    private Bitmap croppedBitmap;
+    // Maintains current rotation (used for rotating the exported bitmap)
     private float currentRotation;
 
-    // Load openCV -- DO NOT REMOVE THIS OR ELSE YOU WILL HAVE A BAD TIME
-    static {
-        System.loadLibrary(mOpenCvLibrary);
-    }
+    private Animation rotateAnimation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +97,33 @@ public class ScanActivity extends AppCompatActivity implements IScanner, View.On
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         init();
+    }
+
+    /**
+     * WHOA THERE! This is probably the worst possible solution to up navigation!
+     * <p>
+     * In the future, this should be switching between activities (ScanActivity, CropActivity, RotateActivity) or Fragments (?)
+     * Right now, it just goes through some functions that hide/show views in order to match what should be shown
+     */
+    @Override
+    public void onBackPressed() {
+        Log.i(TAG, "Back has been pressed");
+
+        // We're in the rotate view, so go back to the crop view
+        if (cropSaveBtn.getVisibility() == View.VISIBLE) {
+            // Go back to the crop view
+            Log.i(TAG, "Goind back to crop view");
+            activateCropView();
+//            onPictureClicked(copyBitmap);
+            // We're in crop view, so go back to the scan view
+        } else if (cropAcceptBtn.getVisibility() == View.VISIBLE) {
+            // Go back to the scan view
+            Log.i(TAG, "Goind back to scan view");
+            activateScanView();
+        } else {
+            // Exit, probably
+            super.onBackPressed();
+        }
     }
 
     private void init() {
@@ -116,25 +141,17 @@ public class ScanActivity extends AppCompatActivity implements IScanner, View.On
 
         currentRotation = 0f;
 
+        // The accept button uses this class' onClick method for some reason TODO: this should be fixed
         cropAcceptBtn.setOnClickListener(this);
 
         // Reject button click listener
         cropRejectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cameraPreviewLayout.setVisibility(View.VISIBLE);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-                    TransitionManager.beginDelayedTransition(containerScan);
-                cropLayout.setVisibility(View.GONE);
-                cropSaveBtn.setVisibility(GONE);
-                mImageSurfaceView.setPreviewCallback();
-
-                // Reset rotation
-                currentRotation = 0f;
-                polygonView.setRotation(currentRotation);
-                cropImageView.setRotation(currentRotation);
+                activateScanView();
             }
         });
+
         checkCameraPermissions();
     }
 
@@ -162,7 +179,7 @@ public class ScanActivity extends AppCompatActivity implements IScanner, View.On
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String permissions[], @NonNull int[] grantResults) {
+                                           @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_CAMERA:
                 onRequestCamera(grantResults);
@@ -226,14 +243,15 @@ public class ScanActivity extends AppCompatActivity implements IScanner, View.On
         }
     }
 
+    /**
+     * Shows the cropping activity
+     *
+     * @param bitmap
+     */
     @Override
     public void onPictureClicked(final Bitmap bitmap) {
         try {
-            // Show correct information for crop activity
-            cropImageView.setVisibility(View.VISIBLE);
-            cameraPreviewLayout.setVisibility(GONE);
-            cropAcceptBtn.setVisibility(View.VISIBLE);
-            cropRotateBtn.setVisibility(GONE);
+            activateCropView();
 
             copyBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
 
@@ -295,33 +313,22 @@ public class ScanActivity extends AppCompatActivity implements IScanner, View.On
 
     /**
      * Accept the crop, start the rotation activity
+     *
      * @param view
      */
     @Override
     public void onClick(View view) {
-        Map<Integer, PointF> points = polygonView.getPoints();
-        if (ScanUtils.isScanPointsValid(points)) {
-            Point point1 = new Point(points.get(0).x, points.get(0).y);
-            Point point2 = new Point(points.get(1).x, points.get(1).y);
-            Point point3 = new Point(points.get(2).x, points.get(2).y);
-            Point point4 = new Point(points.get(3).x, points.get(3).y);
-            copyBitmap = ScanUtils.enhanceReceipt(copyBitmap, point1, point2, point3, point4);
-        }
-        cropImageView.setImageBitmap(copyBitmap);
-        cropRotateBtn.setVisibility(View.VISIBLE);
-        cropSaveBtn.setVisibility(View.VISIBLE);
-        cropAcceptBtn.setVisibility(GONE);
-        polygonView.setVisibility(GONE);
-        cropImageView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT,  Gravity.CENTER));
+        activateRotateView();
     }
 
     /**
-     * Rotates the image
+     * Rotates the cropped image view, but not the bitmap itself
+     *
      * @param v view from button's onClick
      */
     public void onRotateButtonClick(View v) {
         // Update the rotation using a cool rotation animation
-        RotateAnimation rotateAnimation = new RotateAnimation(currentRotation, currentRotation - 90f,
+        rotateAnimation = new RotateAnimation(currentRotation, currentRotation - 90f,
                 Animation.RELATIVE_TO_SELF, .5f, Animation.RELATIVE_TO_SELF, .5f);
         rotateAnimation.setInterpolator(new AccelerateDecelerateInterpolator()); // Nice and smooth
         rotateAnimation.setDuration(250); // 250 milliseconds
@@ -338,6 +345,7 @@ public class ScanActivity extends AppCompatActivity implements IScanner, View.On
             @Override
             public void onAnimationEnd(Animation animation) {
                 cropRotateBtn.setEnabled(true);
+                currentRotation -= 90;
             }
 
             @Override
@@ -347,21 +355,17 @@ public class ScanActivity extends AppCompatActivity implements IScanner, View.On
         });
         cropImageView.setAnimation(rotateAnimation);
         cropImageView.startAnimation(rotateAnimation);
-
-        // Update the currentRotation value
-        currentRotation -= 90f;
-        if (currentRotation <= -360f) {
-            currentRotation = 0;
-        }
     }
 
     /**
      * Saves the image and finishes the activity
+     *
      * @param v
      */
     public void saveImage(View v) {
-        copyBitmap = rotateBitmap(copyBitmap, (int) currentRotation);
-        String path = ScanUtils.saveToInternalMemory(copyBitmap, ScanConstants.IMAGE_DIR,
+        // Since there is no way back out of saving the image, we can just rotate the cropped bitmap
+        croppedBitmap = rotateBitmap(croppedBitmap, (int) currentRotation);
+        String path = ScanUtils.saveToInternalMemory(croppedBitmap, ScanConstants.IMAGE_DIR,
                 ScanConstants.IMAGE_NAME, ScanActivity.this, 90)[0];
         setResult(Activity.RESULT_OK, new Intent().putExtra(ScanConstants.SCANNED_RESULT, path));
         System.gc();
@@ -370,6 +374,7 @@ public class ScanActivity extends AppCompatActivity implements IScanner, View.On
 
     /**
      * Rotates bitmap 90 degrees
+     *
      * @param bitmap
      * @return rotated bitmap
      */
@@ -378,5 +383,54 @@ public class ScanActivity extends AppCompatActivity implements IScanner, View.On
         matrix.postRotate(degrees);
         Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight(), true);
         return Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+    }
+
+    // ====== Helper methods for the horrible back navigation =======
+
+    private void activateCropView() {
+        // Show correct information for crop activity
+        cropImageView.setVisibility(View.VISIBLE);
+        polygonView.setVisibility(View.VISIBLE);
+        cameraPreviewLayout.setVisibility(GONE);
+        cropRejectBtn.setVisibility(View.VISIBLE);
+        cropRotateBtn.setVisibility(GONE);
+        cropAcceptBtn.setVisibility(View.VISIBLE);
+        cropSaveBtn.setVisibility(GONE);
+        cropImageView.clearAnimation();
+    }
+
+    private void activateRotateView() {
+        Map<Integer, PointF> points = polygonView.getPoints();
+        if (ScanUtils.isScanPointsValid(points)) {
+            Point point1 = new Point(points.get(0).x, points.get(0).y);
+            Point point2 = new Point(points.get(1).x, points.get(1).y);
+            Point point3 = new Point(points.get(2).x, points.get(2).y);
+            Point point4 = new Point(points.get(3).x, points.get(3).y);
+            croppedBitmap = ScanUtils.enhanceReceipt(copyBitmap, point1, point2, point3, point4);
+        }
+        cropImageView.setAnimation(rotateAnimation);
+        mImageSurfaceView.setVisibility(View.INVISIBLE);
+        cropImageView.setImageBitmap(croppedBitmap);
+        cropRotateBtn.setVisibility(View.VISIBLE);
+        cropSaveBtn.setVisibility(View.VISIBLE);
+        cropRejectBtn.setVisibility(View.VISIBLE);
+        cropAcceptBtn.setVisibility(GONE);
+        polygonView.setVisibility(GONE);
+        cropImageView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, Gravity.CENTER));
+    }
+
+    private void activateScanView() {
+        currentRotation = 0f;
+        polygonView.setVisibility(GONE);
+        cropImageView.setVisibility(View.GONE);
+        cameraPreviewLayout.setVisibility(View.VISIBLE);
+        mImageSurfaceView.setVisibility(View.VISIBLE);
+        cropAcceptBtn.setVisibility(GONE);
+        cropSaveBtn.setVisibility(GONE);
+        cropLayout.setVisibility(GONE);
+        cropRotateBtn.setVisibility(GONE);
+        cropRejectBtn.setVisibility(GONE);
+        mImageSurfaceView.setPreviewCallback();
+        copyBitmap.recycle();
     }
 }

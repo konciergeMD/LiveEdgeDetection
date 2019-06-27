@@ -10,4 +10,7 @@
     <string name="btn_description_accept_this_crop">Accept this crop</string>
     <string name="btn_description_reject_this_crop">Reject this crop</string>
     <string name="btn_description_rotate_the_crop">Rotate the crop</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
