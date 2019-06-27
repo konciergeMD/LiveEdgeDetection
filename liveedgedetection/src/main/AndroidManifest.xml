@@ -9,10 +9,17 @@
     <uses-feature android:name="android.hardware.camera" />
 
     <application android:supportsRtl="true">
-        <activity android:name=".activity.RotateActivity"></activity>
         <activity
             android:name=".activity.ScanActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <intent-filter>
+                <action android:name="android.media.action.IMAGE_CAPTURE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
