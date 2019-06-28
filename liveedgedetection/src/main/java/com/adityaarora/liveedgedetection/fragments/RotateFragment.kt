@@ -1,40 +1,95 @@
 package com.adityaarora.liveedgedetection.fragments
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.Animation
+import android.view.animation.RotateAnimation
 import com.adityaarora.liveedgedetection.R
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import com.adityaarora.liveedgedetection.activity.ScanActivity
+import kotlinx.android.synthetic.main.fragment_rotate.*
 
 /**
- * A simple [Fragment] subclass.
+ * Fragment that handles rotating an image and then saving it
+ *
  * Use the [RotateFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
 class RotateFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var bitmap: Bitmap
+    private var currentRotation: Float = 0f
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_rotate, container, false)
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        rotate_image_view.setImageBitmap(bitmap)
+
+        rotate_rotate_btn.setOnClickListener {v ->
+            onRotateButtonClick(v)
+        }
+
+        rotate_save_btn.setOnClickListener { v ->
+            onSaveButtonClick(v)
+        }
+
+        rotate_reject_btn.setOnClickListener { v ->
+            fragmentManager.popBackStack()
+        }
+    }
+
+    /**
+     * Rotates the cropped image view, but not the bitmap itself
+     *
+     * @param v view from button's onClick
+     */
+    fun onRotateButtonClick(v: View) {
+        // Update the rotation using a cool rotation animation
+        var rotateAnimation = RotateAnimation(currentRotation, currentRotation - 90f,
+                Animation.RELATIVE_TO_SELF, .5f, Animation.RELATIVE_TO_SELF, .5f)
+
+        // Non-null assertion here should be okay because we JUST updated it
+        rotateAnimation.interpolator = AccelerateDecelerateInterpolator() // Nice and smooth
+        rotateAnimation.duration = 250 // 250 milliseconds
+        rotateAnimation.fillAfter = true
+        rotateAnimation.isFillEnabled = true
+
+        // Listener for enabling and disabling the rotation button
+        rotateAnimation.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(animation: Animation) {
+                rotate_rotate_btn.isEnabled = false
+            }
+
+            override fun onAnimationEnd(animation: Animation) {
+                rotate_rotate_btn.isEnabled = true
+                currentRotation -= 90f
+            }
+
+            override fun onAnimationRepeat(animation: Animation) {}
+        })
+        rotate_image_view!!.animation = rotateAnimation
+        rotate_image_view.startAnimation(rotateAnimation)
+    }
+
+    /**
+     * Save the image
+     *
+     * @param v view from button's onCLick
+     */
+    private fun onSaveButtonClick(v: View) {
+        if (activity is ScanActivity) {
+            this.bitmap = (activity as ScanActivity).rotateBitmap(bitmap, currentRotation.toInt())
+            (activity as ScanActivity).saveImage(this.bitmap)
+        }
     }
 
     companion object {
@@ -42,18 +97,13 @@ class RotateFragment : Fragment() {
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
+         * @param bitmap cropped bitmap
          * @return A new instance of fragment RotateFragment.
          */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(bitmap: Bitmap) =
                 RotateFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
-                    }
+                    this.bitmap = bitmap
                 }
     }
 }

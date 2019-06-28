@@ -36,16 +36,6 @@ import java.util.Stack
  * This class initiates camera and detects edges on live view
  */
 class ScanActivity : FragmentActivity() {
-    private val cropImageView: ImageView? = null
-    // Buttons switch up being active
-    private val cropRotateBtn: View? = null
-    // Bitmap that has been cropped and enhanced
-    private var croppedBitmap: Bitmap? = null
-    // Maintains current rotation (used for rotating the exported bitmap)
-    private var currentRotation: Float = 0.toFloat()
-
-    private var rotateAnimation: Animation? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan)
@@ -53,6 +43,7 @@ class ScanActivity : FragmentActivity() {
 
     override fun onStart() {
         super.onStart()
+        // Force portrait orientation
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         val newFragment = ScanFragment()
         val ft = supportFragmentManager.beginTransaction()
@@ -61,47 +52,12 @@ class ScanActivity : FragmentActivity() {
     }
 
     /**
-     * Rotates the cropped image view, but not the bitmap itself
-     *
-     * @param v view from button's onClick
-     */
-    fun onRotateButtonClick(v: View) {
-        // Update the rotation using a cool rotation animation
-        rotateAnimation = RotateAnimation(currentRotation, currentRotation - 90f,
-                Animation.RELATIVE_TO_SELF, .5f, Animation.RELATIVE_TO_SELF, .5f)
-        rotateAnimation!!.interpolator = AccelerateDecelerateInterpolator() // Nice and smooth
-        rotateAnimation!!.duration = 250 // 250 milliseconds
-        rotateAnimation!!.fillAfter = true
-        rotateAnimation!!.isFillEnabled = true
-
-        // Listener for enabling and disabling the rotation button
-        rotateAnimation!!.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation) {
-                cropRotateBtn!!.isEnabled = false
-            }
-
-            override fun onAnimationEnd(animation: Animation) {
-                cropRotateBtn!!.isEnabled = true
-                currentRotation -= 90f
-            }
-
-            override fun onAnimationRepeat(animation: Animation) {
-
-            }
-        })
-        cropImageView!!.animation = rotateAnimation
-        cropImageView.startAnimation(rotateAnimation)
-    }
-
-    /**
      * Saves the image and finishes the activity
      *
-     * @param v
+     * @param bitmap
      */
-    fun saveImage(v: View) {
-        // Since there is no way back out of saving the image, we can just rotate the cropped bitmap
-        croppedBitmap = rotateBitmap(croppedBitmap, currentRotation.toInt())
-        val path = ScanUtils.saveToInternalMemory(croppedBitmap, ScanConstants.IMAGE_DIR,
+    fun saveImage(bitmap: Bitmap) {
+         val path = ScanUtils.saveToInternalMemory(bitmap, ScanConstants.IMAGE_DIR,
                 ScanConstants.IMAGE_NAME, this, 90)[0]
         setResult(Activity.RESULT_OK, Intent().putExtra(ScanConstants.SCANNED_RESULT, path))
         System.gc()
@@ -109,12 +65,12 @@ class ScanActivity : FragmentActivity() {
     }
 
     /**
-     * Rotates bitmap 90 degrees
+     * Rotates bitmap
      *
      * @param bitmap
      * @return rotated bitmap
      */
-    private fun rotateBitmap(bitmap: Bitmap?, degrees: Int): Bitmap {
+    fun rotateBitmap(bitmap: Bitmap?, degrees: Int): Bitmap {
         val matrix = Matrix()
         matrix.postRotate(degrees.toFloat())
         val scaledBitmap = Bitmap.createScaledBitmap(bitmap!!, bitmap.width, bitmap.height, true)
@@ -124,7 +80,7 @@ class ScanActivity : FragmentActivity() {
     companion object {
         val allDraggedPointsStack = Stack<PolygonPoints>()
         private val TAG = ScanActivity::class.java.simpleName
-        private val mOpenCvLibrary = "opencv_java3"
+        private const val mOpenCvLibrary = "opencv_java3"
 
         // Load OpenCV -- DO NOT REMOVE THIS OR ELSE YOU WILL HAVE A BAD TIME
         init {

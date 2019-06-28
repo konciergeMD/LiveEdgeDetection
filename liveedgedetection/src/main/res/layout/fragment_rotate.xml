@@ -25,26 +25,36 @@
             android:layout_gravity="bottom|center"
             android:layout_marginBottom="20dp"
             android:gravity="center">
-        <ImageView
-            android:id="@+id/rotate_save_btn"
-            android:layout_width="@dimen/btn_scan_options_size"
-            android:layout_height="@dimen/btn_scan_options_size"
-            android:layout_margin="12dp"
-            android:background="@drawable/accept"
-            android:contentDescription="@string/btn_description_accept_this_crop"
-            android:padding="@dimen/btn_icon_padding"
-            android:src="@drawable/ic_save_white_24dp"
-            android:visibility="gone" />
 
-        <ImageView
-            android:id="@+id/rotate_rotate_btn"
-            android:layout_width="@dimen/btn_scan_options_size"
-            android:layout_height="@dimen/btn_scan_options_size"
-            android:layout_margin="12dp"
-            android:background="@drawable/rotate"
-            android:contentDescription="@string/btn_description_rotate_the_crop"
-            android:padding="@dimen/btn_icon_padding"
-            android:src="@drawable/ic_rotate_90_degrees_ccw_white_18dp" />
+            <ImageView
+                android:id="@+id/rotate_save_btn"
+                android:layout_width="@dimen/btn_scan_options_size"
+                android:layout_height="@dimen/btn_scan_options_size"
+                android:layout_margin="12dp"
+                android:background="@drawable/accept"
+                android:contentDescription="@string/btn_description_accept_this_crop"
+                android:padding="@dimen/btn_icon_padding"
+                android:src="@drawable/ic_save_white_24dp" />
+
+            <ImageView
+                android:id="@+id/rotate_rotate_btn"
+                android:layout_width="@dimen/btn_scan_options_size"
+                android:layout_height="@dimen/btn_scan_options_size"
+                android:layout_margin="12dp"
+                android:background="@drawable/rotate"
+                android:contentDescription="@string/btn_description_rotate_the_crop"
+                android:padding="@dimen/btn_icon_padding"
+                android:src="@drawable/ic_rotate_90_degrees_ccw_white_18dp" />
+
+            <ImageView
+                android:id="@+id/rotate_reject_btn"
+                android:layout_width="@dimen/btn_scan_options_size"
+                android:layout_height="@dimen/btn_scan_options_size"
+                android:layout_margin="12dp"
+                android:background="@drawable/reject"
+                android:contentDescription="@string/btn_description_reject_this_crop"
+                android:padding="@dimen/btn_icon_padding"
+                android:src="@drawable/ic_clear_white_24dp" />
         </LinearLayout>
     </FrameLayout>
 

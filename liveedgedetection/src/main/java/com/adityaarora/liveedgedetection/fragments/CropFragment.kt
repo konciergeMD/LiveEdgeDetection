@@ -2,14 +2,15 @@ package com.adityaarora.liveedgedetection.fragments
 
 import android.support.v4.app.Fragment
 import android.graphics.Bitmap
+import org.opencv.core.Point
 import android.graphics.PointF
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
 import android.widget.ImageView
-
 import com.adityaarora.liveedgedetection.R
+
 import com.adityaarora.liveedgedetection.util.ScanUtils
 import kotlinx.android.synthetic.main.fragment_crop.*
 import org.opencv.android.Utils
@@ -37,20 +38,38 @@ class CropFragment : Fragment() {
 
         crop_layout.visibility = View.VISIBLE
 
-        crop_reject_btn.setOnClickListener { v ->
+        crop_reject_btn.setOnClickListener {
             activity.fragmentManager.popBackStack()
         }
 
-        crop_accept_btn.setOnClickListener { v ->
-            // TODO: Swap to the ROTATE FRAGMENT
-            val rotateFragment = RotateFragment.newInstance("", "")
+        crop_accept_btn.setOnClickListener {
+            val points = polygon_view.points
+
+            // We need to keep this.bitmap intact in case the user goes back
+            var copyBitmap: Bitmap = this.bitmap
+
+            // Crop and flatten it to look pretty
+            if (ScanUtils.isScanPointsValid(points)) {
+                val point1 = Point(points[0]?.x!!.toDouble(), points[0]?.y!!.toDouble())
+                val point2 = Point(points[1]?.x!!.toDouble(), points[1]?.y!!.toDouble())
+                val point3 = Point(points[2]?.x!!.toDouble(), points[2]?.y!!.toDouble())
+                val point4 = Point(points[3]?.x!!.toDouble(), points[3]?.y!!.toDouble())
+                copyBitmap = ScanUtils.enhanceReceipt(bitmap, point1, point2, point3, point4)
+            }
+
+            val rotateFragment = RotateFragment.newInstance(copyBitmap)
             val fm = activity.supportFragmentManager
             val transaction = fm.beginTransaction()
             transaction.replace(R.id.base_layout, rotateFragment)
             transaction.addToBackStack(null)
             transaction.commit()
         }
-        onPictureClicked(bitmap)
+
+        crop_reject_btn.setOnClickListener {
+            fragmentManager.popBackStack()
+        }
+
+        cropAndEnhanceImage(bitmap)
     }
 
     /**
@@ -58,7 +77,7 @@ class CropFragment : Fragment() {
      *
      * @param bitmap
      */
-    private fun onPictureClicked(bitmap: Bitmap) {
+    private fun cropAndEnhanceImage(bitmap: Bitmap) {
         try {
             var copyBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
 
@@ -103,12 +122,13 @@ class CropFragment : Fragment() {
                 // Update the crop image view size
                 crop_image_view.layoutParams = FrameLayout.LayoutParams(copyBitmap.width, copyBitmap.height)
 
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-//                    TransitionManager.beginDelayedTransition(containerScan)
-
                 crop_layout.visibility = View.VISIBLE
 
                 crop_image_view.setImageBitmap(copyBitmap)
+
+                // Overwrite the old bitmap with the new cool one
+                this.bitmap = copyBitmap
+
                 crop_image_view.scaleType = ImageView.ScaleType.FIT_XY
             } catch (e: Exception) {
                 Log.e(TAG, e.message, e)
