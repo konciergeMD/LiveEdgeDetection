@@ -1,4 +1,4 @@
-[![Release](https://jitpack.io/v/adityaarora1/LiveEdgeDetection.svg)](https://jitpack.io/#adityaarora1/LiveEdgeDetection)
+[![Release](https://jitpack.io/v/konciergeMD/LiveEdgeDetection.svg)](https://jitpack.io/#konciergeMD/LiveEdgeDetection)
 
 # LiveEdgeDetection
 
@@ -8,19 +8,6 @@ LiveEdgeDetection is an Android document detection library built on top of OpenC
 
 # JavaDocs
 You can browse the [JavaDocs for the latest release](https://adityaarora1.github.io/LiveEdgeDetection/docs)
-
-# Download apk
-Try the [sample app](https://drive.google.com/file/d/1sO26O4-1-2XAX16czREx7SiiCD8-4ecU/view?usp=sharing)
-
-# Screenshots
-
-![Use darker bg](https://github.com/adityaarora1/LiveEdgeDetection/blob/master/use_darker_bg.png)
-![Move closer](https://github.com/adityaarora1/LiveEdgeDetection/blob/master/move_closer.png)
-![Move away](https://github.com/adityaarora1/LiveEdgeDetection/blob/master/move_away.png)
-![Adjust angle](https://github.com/adityaarora1/LiveEdgeDetection/blob/master/adjust_angle.png)
-![Hold still](https://github.com/adityaarora1/LiveEdgeDetection/blob/master/hold_still.png)
-![Adjust crop](https://github.com/adityaarora1/LiveEdgeDetection/blob/master/adjust_crop.png)
-![Result](https://github.com/adityaarora1/LiveEdgeDetection/blob/master/cropped.png)
 
 # Integrating into your project
 This library is available in [JitPack.io](https://jitpack.io/) repository.
@@ -39,8 +26,7 @@ and add the repository's url to the app's build.gradle file.
 
 ```
 dependencies {
-    // FIXME: Ensure this is a stable version for release.
-    implementation 'com.github.konciergeMD:LiveEdgeDetection:bug_broken_jitpack-SNAPSHOT'}   
+    implementation 'com.github.konciergeMD:LiveEdgeDetection:2.0'}   
     // Other dependencies your app might use
 }
 ```
