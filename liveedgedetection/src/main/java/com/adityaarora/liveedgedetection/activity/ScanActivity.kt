@@ -41,7 +41,8 @@ class ScanActivity : FragmentActivity() {
     fun saveImage(bitmap: Bitmap) {
          val path = ScanUtils.saveToInternalMemory(bitmap, ScanConstants.IMAGE_DIR,
                 ScanConstants.IMAGE_NAME, this, 90)[0]
-        setResult(Activity.RESULT_OK, Intent().putExtra(ScanConstants.SCANNED_RESULT, path))
+        intent.putExtra(ScanConstants.SCANNED_RESULT, path)
+        setResult(Activity.RESULT_OK, intent)
         System.gc()
         finish()
     }
