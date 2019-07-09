@@ -19,6 +19,7 @@ import org.opencv.core.Mat
 import org.opencv.imgproc.Imgproc
 import java.util.ArrayList
 import java.util.HashMap
+import kotlin.math.abs
 
 /**
  * Fragment for cropping the image
@@ -93,7 +94,7 @@ class CropFragment : Fragment() {
             try {
                 val quad = ScanUtils.detectLargestQuadrilateral(originalMat)
                 if (null != quad) {
-                    val resultArea = Math.abs(Imgproc.contourArea(quad.contour))
+                    val resultArea = abs(Imgproc.contourArea(quad.contour))
                     val previewArea = (originalMat.rows() * originalMat.cols()).toDouble()
                     if (resultArea > previewArea * 0.08) {
                         points = ArrayList()
@@ -117,7 +118,7 @@ class CropFragment : Fragment() {
                 val padding = resources.getDimension(R.dimen.scan_padding).toInt()
                 val layoutParams = FrameLayout.LayoutParams(copyBitmap.width + 2 * padding, copyBitmap.height + 2 * padding)
                 layoutParams.gravity = Gravity.CENTER
-                polygon_view.setLayoutParams(layoutParams)
+                polygon_view.layoutParams = layoutParams
 
                 // Update the crop image view size
                 crop_image_view.layoutParams = FrameLayout.LayoutParams(copyBitmap.width, copyBitmap.height)

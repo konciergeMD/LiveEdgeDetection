@@ -12,9 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-
 import com.adityaarora.liveedgedetection.R
-import com.adityaarora.liveedgedetection.activity.ScanActivity
 import com.adityaarora.liveedgedetection.enums.ScanHint
 import com.adityaarora.liveedgedetection.interfaces.IScanner
 import com.adityaarora.liveedgedetection.view.ScanSurfaceView
@@ -28,9 +26,6 @@ private const val MY_PERMISSIONS_REQUEST_CAMERA = 101
  * create an instance of this fragment.
  */
 class ScanFragment : Fragment(), IScanner {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
     private var isPermissionNotGranted: Boolean = false
     private var mImageSurfaceView: ScanSurfaceView? = null
 
@@ -59,7 +54,7 @@ class ScanFragment : Fragment(), IScanner {
             isPermissionNotGranted = true
             if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
                             Manifest.permission.CAMERA)) {
-                Toast.makeText(activity, "Enable camera permission from settings", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, getString(R.string.toast_camera_activity_permission_request), Toast.LENGTH_SHORT).show()
             } else {
                 ActivityCompat.requestPermissions(activity,
                         arrayOf(Manifest.permission.CAMERA),
@@ -92,7 +87,7 @@ class ScanFragment : Fragment(), IScanner {
             }, 500)
 
         } else {
-            Toast.makeText(activity, getString(R.string.camera_activity_permission_denied_toast), Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, getString(R.string.toast_camera_activity_permission_denied), Toast.LENGTH_SHORT).show()
             activity.finish()
         }
     }
@@ -102,7 +97,7 @@ class ScanFragment : Fragment(), IScanner {
      * @param scanHint
      */
     override fun displayHint(scanHint: ScanHint) {
-        capture_hint_layout.setVisibility(View.VISIBLE)
+        capture_hint_layout.visibility = View.VISIBLE
         when (scanHint) {
             ScanHint.MOVE_CLOSER -> {
                 capture_hint_text.text = resources.getString(R.string.move_closer)
@@ -124,7 +119,7 @@ class ScanFragment : Fragment(), IScanner {
                 capture_hint_text.text = resources.getString(R.string.hold_still)
                 capture_hint_layout.background = resources.getDrawable(R.drawable.hint_green)
             }
-            ScanHint.NO_MESSAGE -> capture_hint_layout.setVisibility(View.GONE)
+            ScanHint.NO_MESSAGE -> capture_hint_layout.visibility = View.GONE
         }
     }
 

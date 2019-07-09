@@ -26,7 +26,7 @@ and add the repository's url to the app's build.gradle file.
 
 ```
 dependencies {
-    implementation 'com.github.konciergeMD:LiveEdgeDetection:2.0'}   
+    implementation 'com.github.konciergeMD:LiveEdgeDetection:2.0'
     // Other dependencies your app might use
 }
 ```

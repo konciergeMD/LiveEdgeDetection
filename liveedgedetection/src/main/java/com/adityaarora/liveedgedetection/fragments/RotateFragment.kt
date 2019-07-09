@@ -52,9 +52,9 @@ class RotateFragment : Fragment() {
      *
      * @param v view from button's onClick
      */
-    fun onRotateButtonClick(v: View) {
+    private fun onRotateButtonClick(v: View) {
         // Update the rotation using a cool rotation animation
-        var rotateAnimation = RotateAnimation(currentRotation, currentRotation - 90f,
+        val rotateAnimation = RotateAnimation(currentRotation, currentRotation - 90f,
                 Animation.RELATIVE_TO_SELF, .5f, Animation.RELATIVE_TO_SELF, .5f)
 
         // Non-null assertion here should be okay because we JUST updated it

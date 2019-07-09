@@ -334,11 +334,9 @@ public class ScanUtils {
     private static Mat morph_kernel = new Mat(new Size(ScanConstants.KSIZE_CLOSE, ScanConstants.KSIZE_CLOSE), CvType.CV_8UC1, new Scalar(255));
 
     public static Quadrilateral detectLargestQuadrilateral(Mat originalMat) {
-//        Imgproc.cvtColor(originalMat, originalMat, Imgproc.COLOR_BGR2GRAY, 4);
         Imgproc.cvtColor(originalMat, originalMat, Imgproc.COLOR_RGB2GRAY, 4);
 
         // Just OTSU/Binary thresholding is not enough.
-        //Imgproc.threshold(mGrayMat, mGrayMat, 150, 255, THRESH_BINARY + THRESH_OTSU);
 
         /*
         *  1. We shall first blur and normalize the image for uniformity,

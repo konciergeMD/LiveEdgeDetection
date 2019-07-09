@@ -1,36 +1,18 @@
 package com.adityaarora.liveedgedetection.activity
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
-import android.support.v4.app.FragmentTransaction
-import android.support.v7.app.AppCompatActivity
-import android.util.AttributeSet
-import android.view.View
-import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.Animation
-import android.view.animation.RotateAnimation
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-
 import com.adityaarora.liveedgedetection.R
 import com.adityaarora.liveedgedetection.constants.ScanConstants
 import com.adityaarora.liveedgedetection.fragments.ScanFragment
 import com.adityaarora.liveedgedetection.util.ScanUtils
 import com.adityaarora.liveedgedetection.view.PolygonPoints
-import com.adityaarora.liveedgedetection.view.PolygonView
-import com.adityaarora.liveedgedetection.view.ScanSurfaceView
-
-import java.util.Stack
+import java.util.*
 
 /**
  * This class initiates camera and detects edges on live view
