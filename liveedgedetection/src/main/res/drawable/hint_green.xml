@@ -7,10 +7,10 @@
         android:left="10dp"
         android:right="10dp"
         android:top="10dp" />
-    <solid android:color="@color/green" />
+    <solid android:color="@color/accoladeGreen" />
 
     <stroke
         android:width="2dp"
-        android:color="@color/green" />
+        android:color="@color/accoladeGreen" />
 
 </shape>

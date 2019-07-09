@@ -1,10 +1,17 @@
 <resources>
-    <string name="camera_activity_permission_denied_toast">Please go to app settings and grant camera permission</string>
+    <string name="toast_camera_activity_permission_denied">Please go to app settings and grant camera permission</string>
 
-    <string name="finding_rect">Use darker background</string>
+    <string name="finding_rect">Searching for a card</string>
     <string name="move_away">Move away</string>
     <string name="move_closer">Move closer</string>
     <string name="adjust_angle">Adjust angle</string>
     <string name="hold_still">Hold still</string>
     <string name="capturing">Capturing image</string>
+    <string name="btn_description_accept_this_crop">Accept this crop</string>
+    <string name="btn_description_reject_this_crop">Reject this crop</string>
+    <string name="btn_description_rotate_the_crop">Rotate the crop</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="toast_camera_activity_permission_request">Enable camera permission from settings</string>
 </resources>

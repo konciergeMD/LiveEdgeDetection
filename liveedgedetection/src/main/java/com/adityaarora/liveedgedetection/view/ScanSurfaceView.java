@@ -12,11 +12,13 @@ import android.graphics.drawable.shapes.PathShape;
 import android.hardware.Camera;
 import android.media.AudioManager;
 import android.os.CountDownTimer;
+import android.support.v4.graphics.ColorUtils;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.FrameLayout;
 
+import com.adityaarora.liveedgedetection.R;
 import com.adityaarora.liveedgedetection.constants.ScanConstants;
 import com.adityaarora.liveedgedetection.enums.ScanHint;
 import com.adityaarora.liveedgedetection.interfaces.IScanner;
@@ -350,21 +352,19 @@ public class ScanSurfaceView extends FrameLayout implements SurfaceHolder.Callba
         int borderColor = 0;
 
         switch (scanHint) {
-            case MOVE_CLOSER:
-            case MOVE_AWAY:
-            case ADJUST_ANGLE:
-                paintColor = Color.argb(30, 255, 38, 0);
-                borderColor = Color.rgb(255, 38, 0);
-                break;
             case FIND_RECT:
-                paintColor = Color.argb(0, 0, 0, 0);
                 borderColor = Color.argb(0, 0, 0, 0);
                 break;
             case CAPTURING_IMAGE:
-                paintColor = Color.argb(30, 38, 216, 76);
-                borderColor = Color.rgb(38, 216, 76);
+                borderColor = getResources().getColor(R.color.accoladeGreen);
                 break;
+
+            default:
+                borderColor = getResources().getColor(R.color.accoladeBlue);
+                break;
+
         }
+        paintColor = ColorUtils.setAlphaComponent(borderColor, 20);
 
         paint.setColor(paintColor);
         border.setColor(borderColor);

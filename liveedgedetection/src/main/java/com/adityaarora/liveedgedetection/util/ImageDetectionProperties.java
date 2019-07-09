@@ -39,11 +39,11 @@ public class ImageDetectionProperties {
     }
 
     public boolean isDetectedWidthAboveLimit() {
-        return resultWidth / previewWidth > 0.9;
+        return resultWidth / previewWidth > 0.99;
     }
 
     public boolean isDetectedHeightAboveLimit() {
-        return resultHeight / previewHeight > 0.9;
+        return resultHeight / previewHeight > 0.99;
     }
 
     public boolean isDetectedHeightAboveNinetySeven() {
@@ -55,7 +55,7 @@ public class ImageDetectionProperties {
     }
 
     public boolean isDetectedAreaAboveLimit() {
-        return resultArea > previewArea * 0.75;
+        return resultArea > previewArea * 0.50;
     }
 
     public boolean isDetectedImageDisProportionate() {
@@ -122,10 +122,10 @@ public class ImageDetectionProperties {
     }
 
     private boolean isRightEdgeTouching() {
-        return (topRightPoint.y >= previewWidth - 50 || bottomRightPoint.y >= previewWidth - 50);
+        return (topRightPoint.y >= previewWidth - 5 || bottomRightPoint.y >= previewWidth - 5);
     }
 
     private boolean isLeftEdgeTouching() {
-        return (topLeftPoint.y <= 50 || bottomLeftPoint.y <= 50);
+        return (topLeftPoint.y <= 5 || bottomLeftPoint.y <= 5);
     }
 }

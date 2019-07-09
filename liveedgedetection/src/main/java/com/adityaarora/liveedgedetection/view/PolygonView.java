@@ -355,7 +355,7 @@ public class PolygonView extends FrameLayout {
 
                     break;
                 case MotionEvent.ACTION_DOWN:
-                    ScanActivity.allDraggedPointsStack.push(new PolygonPoints(new PointF(pointer1.getX(), pointer1.getY()),
+                    ScanActivity.Companion.getAllDraggedPointsStack().push(new PolygonPoints(new PointF(pointer1.getX(), pointer1.getY()),
                             new PointF(pointer2.getX(), pointer2.getY()),
                             new PointF(pointer3.getX(), pointer3.getY()),
                             new PointF(pointer4.getX(), pointer4.getY())));
@@ -377,7 +377,7 @@ public class PolygonView extends FrameLayout {
                         latestPoint2.x = mainPointer2.getX();
                         latestPoint2.y = mainPointer2.getY();
                     } else {
-                        ScanActivity.allDraggedPointsStack.pop();
+                        ScanActivity.Companion.getAllDraggedPointsStack().pop();
                         color = getResources().getColor(R.color.crop_color);
                         v.setX(latestPoint.x);
                         v.setY(latestPoint.y);
@@ -448,7 +448,7 @@ public class PolygonView extends FrameLayout {
                     }
                     break;
                 case MotionEvent.ACTION_DOWN:
-                    ScanActivity.allDraggedPointsStack.push(new PolygonPoints(new PointF(pointer1.getX(), pointer1.getY()),
+                    ScanActivity.Companion.getAllDraggedPointsStack().push(new PolygonPoints(new PointF(pointer1.getX(), pointer1.getY()),
                             new PointF(pointer2.getX(), pointer2.getY()),
                             new PointF(pointer3.getX(), pointer3.getY()),
                             new PointF(pointer4.getX(), pointer4.getY())));
@@ -464,7 +464,7 @@ public class PolygonView extends FrameLayout {
                         latestPoint.x = v.getX();
                         latestPoint.y = v.getY();
                     } else {
-                        ScanActivity.allDraggedPointsStack.pop();
+                        ScanActivity.Companion.getAllDraggedPointsStack().pop();
                         color = getResources().getColor(R.color.crop_color);
                         v.setX(latestPoint.x);
                         v.setY(latestPoint.y);
